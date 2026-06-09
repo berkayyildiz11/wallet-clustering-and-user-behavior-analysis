@@ -224,4 +224,8 @@ data/raw/
 data/interim/
 data/processed/
 data/preprocessed/
+data/splits/
 outputs/
+
+.DS_Store
+**/.DS_Store

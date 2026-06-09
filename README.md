@@ -63,6 +63,22 @@ and the final scaled clustering input under:
 data/preprocessed/
 ```
 
+### 4. Create shared train/validation/test splits
+
+Run this command from the project root:
+
+```bash
+uv run python -m src.data.create_splits
+```
+
+This creates deterministic row-level split assignments under:
+
+```text
+data/splits/
+```
+
+The split file is useful for XGBoost/SHAP evaluation and shared stability checks. K-Means and DBSCAN can still be fit on the full preprocessed dataset because they are unsupervised clustering methods.
+
 ## Important project rule
 
 The dataset contains a `FLAG` column. Do not use `FLAG` as an input feature for clustering. It should only be used after clustering as a validation or sanity-check signal.

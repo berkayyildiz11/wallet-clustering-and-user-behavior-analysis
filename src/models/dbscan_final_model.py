@@ -17,7 +17,7 @@ def main():
 
     final_model = DBSCAN(
         eps=5.0,
-        min_samples=25
+        min_samples=50
     )
 
     final_labels = final_model.fit_predict(X)
@@ -25,7 +25,7 @@ def main():
     print("\nFinal selected parameters:")
     print("eps = 5.0")
 
-    print("min_samples = 25")
+    print("min_samples = 50")
 
     print("\nCluster distribution:")
     print(pd.Series(final_labels).value_counts().sort_index())

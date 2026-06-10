@@ -1,5 +1,6 @@
 import os
 import pandas as pd
+import matplotlib.pyplot as plt
 
 
 LABELS_PATH = "outputs/clusters/dbscan_labels.csv"
@@ -37,6 +38,60 @@ def main():
     ).reset_index()
 
     cluster_validation.to_csv(OUTPUT_CLUSTER_VALIDATION, index=False)
+
+    plt.figure(figsize=(8, 5))
+
+    plt.bar(
+        cluster_validation["dbscan_cluster"].astype(str),
+        cluster_validation["flagged_rate"] * 100
+    )
+
+    plt.title("Fraud Rate by DBSCAN Cluster")
+    plt.xlabel("DBSCAN Cluster")
+    plt.ylabel("Fraud Rate (%)")
+
+    plt.tight_layout()
+
+    plt.savefig(
+        "outputs/figures/dbscan_fraud_rate.png",
+        dpi=300
+    )
+
+    plt.close()
+
+    fig, ax1 = plt.subplots(figsize=(10, 6))
+
+    ax1.bar(
+        cluster_validation["dbscan_cluster"].astype(str),
+        cluster_validation["count"],
+        alpha=0.7
+    )
+
+    ax1.set_xlabel("DBSCAN Cluster")
+    ax1.set_ylabel("Wallet Count")
+
+    ax2 = ax1.twinx()
+
+    ax2.plot(
+        cluster_validation["dbscan_cluster"].astype(str),
+        cluster_validation["flagged_rate"] * 100,
+        marker="o",
+        linewidth=2
+    )
+
+    ax2.set_ylabel("Fraud Rate (%)")
+
+    plt.title("DBSCAN Cluster Size and Fraud Rate")
+
+    plt.tight_layout()
+
+    plt.savefig(
+        "outputs/figures/dbscan_cluster_fraud_analysis.png",
+        dpi=300
+    )
+
+    plt.close()
+
 
     noise_validation = validation_df.groupby("is_noise")["flag"].agg(
         count="count",

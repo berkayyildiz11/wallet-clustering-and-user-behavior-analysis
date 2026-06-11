@@ -237,3 +237,46 @@ outputs/clusters/dbscan_labels.csv
 ```
 
 This file is row-aligned with the original feature files and can be used for later interpretation and comparison.
+
+## Cluster Interpretation Workflow
+
+This step trains a tree-based model to predict K-Means pseudo-labels, then uses SHAP to explain which features distinguish the clusters.
+
+Run this command from the project root:
+
+```bash
+uv run python -m src.interpretation.cluster_interpretation
+```
+
+Required inputs:
+
+```text
+data/interim/features_clean.csv
+data/splits/split_indices.csv
+outputs/clusters/kmeans_labels.csv
+```
+
+Outputs:
+
+```text
+outputs/tables/kmeans_pseudolabel_model_metrics.csv
+outputs/tables/kmeans_pseudolabel_classification_report.csv
+outputs/tables/kmeans_pseudolabel_model_predictions.csv
+outputs/tables/kmeans_cluster_profiles.csv
+outputs/tables/kmeans_cluster_behavior_interpretations.csv
+outputs/tables/kmeans_cluster_top_features.csv
+outputs/tables/kmeans_shap_global_importance.csv
+outputs/figures/kmeans_pseudolabel_model_global_shap_importance.png
+outputs/figures/kmeans_cluster_0_shap_importance.png
+outputs/figures/kmeans_cluster_1_shap_importance.png
+outputs/figures/kmeans_cluster_2_shap_importance.png
+outputs/figures/kmeans_interpretation_cluster_sizes.png
+```
+
+XGBoost is the preferred pseudo-label model. On macOS, XGBoost may require the OpenMP runtime:
+
+```bash
+brew install libomp
+```
+
+If XGBoost cannot load, the script falls back to a SHAP-compatible random forest model so interpretation work can continue.
